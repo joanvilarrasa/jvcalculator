@@ -29,6 +29,11 @@ enum KeyCode {
     // Long press keys
     KEY_LONG_PRESS = 0xffffffff,
     KEY_NONE = 0x00000000,
+
+    // Special keys
+    KEY_ASTERISK = 0xFF5AAD,
+    KEY_SLASH = 0xFF42B5,
+    KEY_EQUAL = 0xFF4ABD,
 };
 
 void IR_Init(int pin);
