@@ -11,6 +11,7 @@
 #define irPin 16
 
 LiquidCrystal_I2C lcd(0x27,16,2); 
+#define LCD_LINE_LENGTH 16
 
 char query[64] = "";
 char result[16] = "";
@@ -74,10 +75,8 @@ void loop() {
   if(irValue == KEY_LONG_PRESS) {
     if(lastKey == KEY_CLEAR) {
       clearQuery();
-      return;
     }
     lastKey = KEY_NONE;
-    return;
   } else {
     lastKey = irValue;
   }
@@ -141,8 +140,19 @@ void loop() {
   }
 
   // Change state
+  char queryToPrint[LCD_LINE_LENGTH] = "";
+  int emptySpaces = LCD_LINE_LENGTH - cursorIndex;
+  for(int i = 0; i < emptySpaces; i++) {
+    queryToPrint[cursorIndex + i] = ' ';
+  }
+  if(emptySpaces < 0) {
+    emptySpaces = 0;
+  }
+  for(int i = emptySpaces; i < LCD_LINE_LENGTH; i++) {
+    queryToPrint[i] = query[i - emptySpaces];
+  }
   lcd.setCursor(0,0);
-  lcd.print(query);
+  lcd.print(queryToPrint);
   lcd.setCursor(0,1);
   lcd.print(result);
 }
