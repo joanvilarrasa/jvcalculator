@@ -141,20 +141,17 @@ void loop() {
 
   // Change state
   char queryToPrint[LCD_LINE_LENGTH] = "";
-  int emptySpaces = LCD_LINE_LENGTH - cursorIndex;
-  for(int i = 0; i < emptySpaces; i++) {
-    queryToPrint[cursorIndex + i] = ' ';
-  }
-  if(emptySpaces < 0) {
-    for(int i = 0; i < LCD_LINE_LENGTH; i++) {
-      queryToPrint[i] = query[i - emptySpaces];
+  for(int i = 0; i < LCD_LINE_LENGTH; i++) {
+    int queryIndex = cursorIndex + i - LCD_LINE_LENGTH;
+    if(queryIndex >= 0) {
+      queryToPrint[i] = query[queryIndex];
+    }
+    else {
+      queryToPrint[i] = ' ';
     }
   }
-  else {
-    for(int i = emptySpaces; i < LCD_LINE_LENGTH; i++) {
-      queryToPrint[i] = query[i - emptySpaces];
-    }
-  }
+
+  
   lcd.setCursor(0,0);
   lcd.print(queryToPrint);
   lcd.setCursor(0,1);
