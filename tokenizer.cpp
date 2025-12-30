@@ -15,7 +15,7 @@ int tokenizeQuery(char *query, Token *tokens) {
     }
     
     char c = query[i];
-    
+
     if(c >= '0' && c <= '9') {
       int num = 0;
       while(i < 64 && query[i] >= '0' && query[i] <= '9') {
@@ -29,8 +29,15 @@ int tokenizeQuery(char *query, Token *tokens) {
     }
     else if(c == '+' || c == '-' || c == '*' || c == '/') {
       tokens[tokenCount].type = TOKEN_OPERATOR;
-      tokens[tokenCount].value = 0;
       tokens[tokenCount].op = c;
+
+      // Use the value to store the precedence of the operator.
+      if(c == '+' || c == '-') {
+        tokens[tokenCount].value = 1;
+      }
+      else if(c == '*' || c == '/') {
+        tokens[tokenCount].value = 2;
+      }
       tokenCount++;
       i++;
     }

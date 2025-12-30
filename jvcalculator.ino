@@ -7,6 +7,7 @@
 #include <LiquidCrystal_I2C.h>
 #include "IR.h"
 #include "tokenizer.h"
+#include "computer.h"
 
 #define irPin 16
 
@@ -39,12 +40,9 @@ void clearQuery() {
 
 void computeResult() {
   tokenCount = tokenizeQuery(query, tokens);
-  for(int i = 0; i < tokenCount; i++) {
-    Serial.println("--------------------------------");
-    Serial.println(tokens[i].type);
-    Serial.println(tokens[i].value);
-    Serial.println(tokens[i].op);
-  }
+  int resultValue = computeResult(tokens, tokenCount);
+  Serial.println(resultValue);
+
   result[0] = '1';
   result[1] = '2';
   result[2] = '3';
