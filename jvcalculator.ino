@@ -6,6 +6,7 @@
 **********************************************************************/
 #include <LiquidCrystal_I2C.h>
 #include "IR.h"
+#include "tokenizer.h"
 
 #define irPin 16
 
@@ -14,7 +15,8 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 
 char query[64] = "";
 char result[LCD_LINE_LENGTH] = "";
-// Queue cache;
+Token tokens[MAX_TOKENS];
+int tokenCount = 0;
 
 int cursorIndex = 0;
 int resultLength = 0;
@@ -36,6 +38,13 @@ void clearQuery() {
 }
 
 void computeResult() {
+  tokenCount = tokenizeQuery(query, tokens);
+  for(int i = 0; i < tokenCount; i++) {
+    Serial.println("--------------------------------");
+    Serial.println(tokens[i].type);
+    Serial.println(tokens[i].value);
+    Serial.println(tokens[i].op);
+  }
   result[0] = '1';
   result[1] = '2';
   result[2] = '3';
@@ -45,11 +54,6 @@ void computeResult() {
 }
 
 void setup() {
-  // Initialize the cache
-  // queue_init(&cache);
-  // queue_enqueue(&cache, "some string");
-  // const char* item = queue_get(&cache, 0);
-
   // Initialize the LCD
   if (!i2CAddrTest(0x27)) {
     lcd = LiquidCrystal_I2C(0x3F, 16, 2);
@@ -62,7 +66,6 @@ void setup() {
 
   // Initialize the query and the result
   clearQuery();
-
 }
 
 void loop() {
