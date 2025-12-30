@@ -8,15 +8,15 @@ enum KeyCode {
     // Short press keys
     KEY_POWER = 0xFFA25D,
     KEY_MENU = 0xFFE21D,
-    KEY_RESULT = 0xFF22DD,
-    KEY_DELETE = 0xFFC23D,
-    KEY_UP = 0xFF02FD,
-    KEY_DOWN = 0xFF9867,
+    KEY_TEST = 0xFF22DD,
+    KEY_PLUS = 0xFF02FD,
+    KEY_BACH = 0xFFC23D,
     KEY_LEFT = 0xFFE01F,
+    KEY_PLAY = 0xFFA857,
     KEY_RIGHT = 0xFF906F,
-    KEY_EQUAL = 0xFFA857,
-    KEY_DOT = 0xFFB04F,
     KEY_0 = 0xFF6897,
+    KEY_MINUS = 0xFF9867,
+    KEY_CLEAR = 0xFFB04F,
     KEY_1 = 0xFF30CF,
     KEY_2 = 0xFF18E7,
     KEY_3 = 0xFF7A85,
@@ -27,13 +27,8 @@ enum KeyCode {
     KEY_8 = 0xFF4AB5,
     KEY_9 = 0xFF52AD,
     // Long press keys
-    KEY_PLUS = 0x30CF00,
-    KEY_MINUS = 0x10EF00,
-    KEY_MULTIPLY = 0x18E700,
-    KEY_DIVIDE = 0x38C700,
-    KEY_OPEN_PARENTHESIS = 0x689700,
-    KEY_CLOSE_PARENTHESIS = 0xB04F00,
-    KEY_CLEAR = 0xC23D00,
+    KEY_LONG_PRESS = 0xffffffff,
+    KEY_NONE = 0x00000000,
 };
 
 void IR_Init(int pin);

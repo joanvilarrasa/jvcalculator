@@ -8,35 +8,6 @@
 #include "IR.h"
 #include "cache.h"
 
-//   KEY_POWER = 0xFFA25D,
-//   KEY_MENU = 0xFFE21D,
-//   KEY_RESULT = 0xFF22DD,
-//   KEY_DELETE = 0xFFC23D,
-//   KEY_UP = 0xFF02FD,
-//   KEY_DOWN = 0xFF9867,
-//   KEY_LEFT = 0xFFE01F,
-//   KEY_RIGHT = 0xFF906F,
-//   KEY_EQUAL = 0xFFA857,
-//   KEY_DOT = 0xFFB04F,
-//   KEY_0 = 0xFF6897,
-//   KEY_1 = 0xFF30CF,
-//   KEY_2 = 0xFF18E7,
-//   KEY_3 = 0xFF7A85,
-//   KEY_4 = 0xFF10EF,
-//   KEY_5 = 0xFF38C7,
-//   KEY_6 = 0xFF5AA5,
-//   KEY_7 = 0xFF42BD,
-//   KEY_8 = 0xFF4AB5,
-//   KEY_9 = 0xFF52AD,
-//   // Long press keys
-//   KEY_PLUS = 0x689700,
-//   KEY_MINUS = 0x10EF00,
-//   KEY_MULTIPLY = 0x18E700,
-//   KEY_DIVIDE = 0x38C700,
-//   KEY_OPEN_PARENTHESIS = 0x689700,
-//   KEY_CLOSE_PARENTHESIS = 0xB04F00,
-//   KEY_CLEAR = 0xC23D00,
-
 #define irPin 16
 
 LiquidCrystal_I2C lcd(0x27,16,2); 
@@ -47,6 +18,7 @@ char result[16] = "";
 
 int cursorIndex = 0;
 int cacheIndex = 0;
+KeyCode lastKey = KEY_NONE;
 bool isOn = false;
 
 
@@ -81,7 +53,7 @@ void addCharToQuery(char c) {
 
 void clearQuery() {
   for(int i = 0; i < 64; i++) {
-    query[i] = '\0';
+    query[i] = ' ';
   }
   cursorIndex = 0;
 }
@@ -97,6 +69,18 @@ void loop() {
   KeyCode irValue = IR_Decode(flagCode);
   Serial.println(irValue, HEX);
   IR_Release();
+
+  // TODO: Possible enhancements: Handle long press keys
+  if(irValue == KEY_LONG_PRESS) {
+    if(lastKey == KEY_CLEAR) {
+      clearQuery();
+      return;
+    }
+    lastKey = KEY_NONE;
+    return;
+  } else {
+    lastKey = irValue;
+  }
 
   // Handle On/Off
   if(isOn && irValue == KEY_POWER) {
@@ -116,11 +100,6 @@ void loop() {
   }
 
   // Handle Normal Keypress
-
-
-
-  // lcd.setCursor(0,1);             // Move the cursor to row 1, column 0
-  // read input and modify the query
   switch (irValue) {
     case KEY_0:              
       addCharToQuery('0');
@@ -152,44 +131,20 @@ void loop() {
     case KEY_9:              
       addCharToQuery('9');
       break;
-    case KEY_PLUS:              
-      addCharToQuery('+');
-      break;
-    case KEY_MINUS:              
-      addCharToQuery('-');
-      break;
-    case KEY_MULTIPLY:              
-      addCharToQuery('*');
-      break;
-    case KEY_DIVIDE:              
-      addCharToQuery('/');
-      break;
-    case KEY_OPEN_PARENTHESIS:              
-      addCharToQuery('(');
-      break;
-    case KEY_CLOSE_PARENTHESIS:              
-      addCharToQuery(')');
-      break;
-    case KEY_DELETE:              
+    
+    case KEY_CLEAR:              
       if(cursorIndex > 0) {
         cursorIndex--;
-        query[cursorIndex] = '\0';
+        query[cursorIndex] = ' ';
       }
-      break;
-    case KEY_CLEAR:              
-      clearQuery();
       break;
   }
 
   // Change state
-
-
   lcd.setCursor(0,0);
   lcd.print(query);
   lcd.setCursor(0,1);
   lcd.print(result);
-  
-
 }
 
 bool i2CAddrTest(uint8_t addr) {

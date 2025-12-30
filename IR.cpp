@@ -69,7 +69,7 @@ KeyCode IR_Decode(int &code) {
   }
   if (code == 2) {
     code = 0;
-    irData <<= 2;
+    irData = 0xffffffff;
   }
   return (KeyCode)irData;
 }
