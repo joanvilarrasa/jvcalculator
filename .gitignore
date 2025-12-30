@@ -1,2 +1,2 @@
-./build
-./lib/LiquidCrystal_I2C/
+build/
+lib/LiquidCrystal_I2C/
