@@ -143,7 +143,7 @@ void loop() {
   char queryToPrint[LCD_LINE_LENGTH] = "";
   int emptySpaces = LCD_LINE_LENGTH - cursorIndex;
   for(int i = 0; i < emptySpaces; i++) {
-    queryToPrint[cursorIndex + i] = '';
+    queryToPrint[cursorIndex + i] = ' ';
   }
   if(emptySpaces < 0) {
     for(int i = 0; i < LCD_LINE_LENGTH; i++) {
