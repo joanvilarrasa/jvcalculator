@@ -43,7 +43,7 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 
 char query[64] = "";
 char result[16] = "";
-Queue cache;
+// Queue cache;
 
 int cursorIndex = 0;
 int cacheIndex = 0;
@@ -53,7 +53,7 @@ bool isOn = false;
 
 void setup() {
   // Initialize the cache
-  queue_init(&cache);
+  // queue_init(&cache);
   // queue_enqueue(&cache, "some string");
   // const char* item = queue_get(&cache, 0);
 
