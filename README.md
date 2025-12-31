@@ -2,6 +2,8 @@
 
 A simple calculator experiment.
 
+https://github.com/user-attachments/assets/ff3188ef-7b3b-43a8-8825-3c3cf99a3341
+
 ## Overview
 
 A simple calculator experiment built for the Raspberry Pi Pico 2. This is just a simple project to explore the raspberry Pi, and the operator precedence algorithm proposed by Jonathan Blow.
@@ -52,4 +54,4 @@ The algorithm is based in the idea that you can separate the problem into 2 subp
 - IR Receiver (connected to pin 16)
 - IR Remote Control
 
-- To build and upload code to the hardware I installed and used the arduino-cli you can see the compile and build commands in the bin directory.
+To build and upload code to the hardware I installed and used the arduino-cli you can see the compile and build commands in the bin directory.
