@@ -25,18 +25,24 @@ int tokenizeQuery(char *query, Token *tokens) {
       tokens[tokenCount].type = TOKEN_NUMBER;
       tokens[tokenCount].value = num;
       tokens[tokenCount].op = '\0';
+      tokens[tokenCount].precedence = 0;
+      tokens[tokenCount].left = nullptr;
+      tokens[tokenCount].right = nullptr;
       tokenCount++;
     }
     else if(c == '+' || c == '-' || c == '*' || c == '/') {
       tokens[tokenCount].type = TOKEN_OPERATOR;
+      tokens[tokenCount].value = 0;
       tokens[tokenCount].op = c;
+      tokens[tokenCount].left = nullptr;
+      tokens[tokenCount].right = nullptr;
 
       // Use the value to store the precedence of the operator.
       if(c == '+' || c == '-') {
-        tokens[tokenCount].value = 1;
+        tokens[tokenCount].precedence = 1;
       }
       else if(c == '*' || c == '/') {
-        tokens[tokenCount].value = 2;
+        tokens[tokenCount].precedence = 2;
       }
       tokenCount++;
       i++;

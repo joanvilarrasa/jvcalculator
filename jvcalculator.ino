@@ -40,6 +40,23 @@ void clearQuery() {
 
 void computeResult() {
   tokenCount = tokenizeQuery(query, tokens);
+
+  Serial.println("Tokens: (type, value, op, precedence)");
+  for(int i = 0; i < tokenCount; i++) {
+    Serial.print("(");
+    Serial.print(tokens[i].type);
+    Serial.print(",");
+    Serial.print(tokens[i].value);
+    Serial.print(",");
+    Serial.print(tokens[i].op);
+    Serial.print(",");
+    Serial.print(tokens[i].precedence);
+    Serial.print(")");
+    if(i < tokenCount - 1) {
+      Serial.print(", ");
+    }
+  }
+  Serial.println("Token count: " + String(tokenCount));
   int resultValue = computeResult(tokens, tokenCount);
   Serial.println(resultValue);
 
@@ -75,7 +92,6 @@ void loop() {
 
   // Read input
   KeyCode irValue = IR_Decode(flagCode);
-  Serial.println(irValue, HEX);
   IR_Release();
   // This should not exists but the remote has a limited number of keys and I do not want to get a new remote as this is just an experiment.
   irValue = translateKey(irValue);

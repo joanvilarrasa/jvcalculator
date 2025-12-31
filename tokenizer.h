@@ -10,7 +10,12 @@ enum TokenType {
 struct Token {
   TokenType type;
   int value;     
-  char op; 
+  char op;
+
+  // This should be its own struct but I want to keep things as simple as possible. This is for the computer. 
+  int precedence;
+  Token *left;
+  Token *right;
 };
 
 int tokenizeQuery(char *query, Token *tokens);

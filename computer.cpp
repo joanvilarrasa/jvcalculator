@@ -2,11 +2,9 @@
 #include "tokenizer.h"
 #include <cstddef>
 
-struct TokenNode {
-    Token token;
-    TokenNode *left;
-    TokenNode *right;
-};
+int tokenIndex = 0;
+int numberOfTokens = 0;
+Token *tokens = nullptr;
 
 void printTree(TokenNode *tree, int level) {
     if(tree == nullptr) {
@@ -20,54 +18,47 @@ void printTree(TokenNode *tree, int level) {
     printTree(tree->right, level + 1);
 }
 
+Token* parseExpression(int minPrecedence);
 
-TokenNode* parseExpression(Token *tokens, int tokenCount, int &i, int minPrecedence);
-
-TokenNode* getNextTokenNode(Token *tokens, int tokenCount, int &i) {
-    if(i >= tokenCount) {
+Token* getNextToken() {
+    if(tokenIndex >= numberOfTokens) {
         return nullptr;
     }
-    static TokenNode node;
-    node.token = tokens[i++];
-    node.left = nullptr;
-    node.right = nullptr;
-    return &node;
+    return tokens[tokenIndex++];
 }
 
-TokenNode* parseIncreasingPrecedence(Token *tokens, int tokenCount, int &i, TokenNode *left, int minPrecedence) {
+Token* parseIncreasingPrecedence(Token *left, int minPrecedence) {
 
-    TokenNode *next = getNextTokenNode(tokens, tokenCount, i);
+    Token *next = getNextToken();
     if(next == nullptr) {
         return left;
     }
-    if(next->token.type == TOKEN_NUMBER) {
+    if(next->type == TOKEN_NUMBER) {
         // This will never be reached
-        i--;
+        tokenIndex--;
         return left;
     }
 
     // Go up the tree because precedence is not increasing.
-    if(next->token.value <= minPrecedence) {
-        i--;
+    if(next->precedence <= minPrecedence) {
+        tokenIndex--;
         return left;
     } 
     else {
         // Go down the tree because precedence is increasing. You go down the right side of the tree.
-        TokenNode *rightNode = parseExpression(tokens, tokenCount, i, next->token.value);
-        static TokenNode result;
-        result.token = next->token;
-        result.left = left;
-        result.right = rightNode;
-        return &result;
+        Token *rightNode = parseExpression(next->precedence);
+        next->left = left;
+        next->right = rightNode;
+        return next;
     }
 
 }
 
-TokenNode* parseExpression(Token *tokens, int tokenCount, int &i, int minPrecedence) {
-    TokenNode *leftNode = getNextTokenNode(tokens, tokenCount, i);
+Token* parseExpression(int minPrecedence) {
+    Token *leftNode = getNextToken();
 
     while (true) {
-        TokenNode *nextLeftNode = parseIncreasingPrecedence(tokens, tokenCount, i, leftNode, minPrecedence);
+        Token *nextLeftNode = parseIncreasingPrecedence(leftNode, minPrecedence);
         if(nextLeftNode == leftNode) { break; }
         leftNode = nextLeftNode;
     }
@@ -101,10 +92,10 @@ TokenNode* parseExpression(Token *tokens, int tokenCount, int &i, int minPrecede
 // }
 
 int computeResult(Token *tokens, int tokenCount) {
-    int i = 0;
-    TokenNode *resultTree = parseExpression(tokens, tokenCount, i, -1);
+    tokenIndex = 0;
+    numberOfTokens = tokenCount;
+    this->tokens = tokens;
+    Token *resultTree = parseExpression(-1);
     printTree(resultTree, 0);
-    // int result = calculateDfs(resultTree);
-    // return result;
     return 0;
 }
