@@ -4,9 +4,9 @@
 
 int tokenIndex = 0;
 int numberOfTokens = 0;
-Token *tokens = nullptr;
+Token *tokenList = nullptr;
 
-void printTree(TokenNode *tree, int level) {
+void printTree(Token *tree, int level) {
     if(tree == nullptr) {
         return;
     }
@@ -14,7 +14,12 @@ void printTree(TokenNode *tree, int level) {
     for(int i = 0; i < level; i++) {
         Serial.print("  ");
     }
-    Serial.println(tree->token.value);
+    if(tree->type == TOKEN_NUMBER) {
+        Serial.println(String(tree->value));
+    }
+    else {
+        Serial.println(tree->op);
+    }
     printTree(tree->right, level + 1);
 }
 
@@ -24,7 +29,8 @@ Token* getNextToken() {
     if(tokenIndex >= numberOfTokens) {
         return nullptr;
     }
-    return tokens[tokenIndex++];
+    return &tokenList[tokenIndex];
+    tokenIndex++;
 }
 
 Token* parseIncreasingPrecedence(Token *left, int minPrecedence) {
@@ -94,7 +100,7 @@ Token* parseExpression(int minPrecedence) {
 int computeResult(Token *tokens, int tokenCount) {
     tokenIndex = 0;
     numberOfTokens = tokenCount;
-    this->tokens = tokens;
+    tokenList = tokens;
     Token *resultTree = parseExpression(-1);
     printTree(resultTree, 0);
     return 0;
