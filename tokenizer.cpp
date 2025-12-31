@@ -37,7 +37,6 @@ int tokenizeQuery(char *query, Token *tokens) {
       tokens[tokenCount].left = nullptr;
       tokens[tokenCount].right = nullptr;
 
-      // Use the value to store the precedence of the operator.
       if(c == '+' || c == '-') {
         tokens[tokenCount].precedence = 1;
       }
