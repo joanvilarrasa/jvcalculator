@@ -122,6 +122,9 @@ int computeResult(Token *tokens, int tokenCount) {
     tokenIndex = 0;
     numberOfTokens = tokenCount;
     tokenList = tokens;
+
+    Serial.println("Parsing expression...");
+
     Token *resultTree = parseExpression(-1);
     Serial.println("Result tree: ");
     printTree(resultTree, 0);
