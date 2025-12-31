@@ -32,20 +32,6 @@ void addCharToQuery(char c) {
   }
 }
 
-void clearQuery() {
-  for(int i = 0; i < 64; i++) {
-    query[i] = ' ';
-  }
-  cursorIndex = 0;
-}
-
-int getResultLength() {
-  if(resultObj.validResult) {
-    return strlen(String(resultObj.value).c_str());
-  }
-  return 0;
-}
-
 void computeResult() {
   tokenCount = tokenizeQuery(query, tokens);
 
@@ -69,7 +55,12 @@ void computeResult() {
   Serial.print("]");
   Serial.println();
   computeResult(tokens, tokenCount, &resultObj);
-  resultLength = getResultLength();
+
+  if(resultObj.validResult) {
+    resultLength = strlen(String(resultObj.value).c_str());
+  } else {
+    resultLength = 0;
+  }
 }
 
 void setup() {
@@ -84,7 +75,10 @@ void setup() {
   IR_Init(irPin);                 // Initialize infrared receiver
 
   // Initialize the query and the result
-  clearQuery();
+  for(int i = 0; i < 64; i++) {
+    query[i] = ' ';
+  }
+  cursorIndex = 0;
 }
 
 void loop() {
@@ -103,7 +97,10 @@ void loop() {
   // TODO: Possible enhancements: Handle long press keys for more complex behaviour.
   if(irValue == KEY_LONG_PRESS) {
     if(lastKey == KEY_CLEAR) {
-      clearQuery();
+      for(int i = 0; i < 64; i++) {
+        query[i] = ' ';
+      }
+      cursorIndex = 0;
     }
     lastKey = KEY_NONE;
   } else {
@@ -112,9 +109,9 @@ void loop() {
 
   // Handle On/Off
   if(isOn && irValue == KEY_POWER) {
-      isOn = false;
-      lcd.noBacklight();
-      lcd.noDisplay();
+    isOn = false;
+    lcd.noBacklight();
+    lcd.noDisplay();
     return;
   }
   if(!isOn) {
@@ -142,8 +139,6 @@ void loop() {
   else if(irValue == KEY_ASTERISK) { addCharToQuery('*'); }
   else if(irValue == KEY_SLASH) { addCharToQuery('/'); }
 
-  // Compute the result
-  computeResult();
 
   // Handle special keys
   if(irValue == KEY_CLEAR) { 
@@ -157,6 +152,7 @@ void loop() {
   }
 
   if(irValue == KEY_EQUAL) {
+    computeResult();
     for(int i = 0; i < LCD_LINE_LENGTH; i++) {
       query[i] = result[i];
     }
@@ -165,8 +161,11 @@ void loop() {
     }
     cursorIndex = resultLength;
   }
+
+  computeResult();
   
   // Render
+  // Print the query to the LCD screen
   char queryToPrint[LCD_LINE_LENGTH] = "";
   for(int i = 0; i < LCD_LINE_LENGTH; i++) {
     int queryIndex = cursorIndex + i - LCD_LINE_LENGTH;
@@ -180,6 +179,7 @@ void loop() {
   lcd.setCursor(0,0);
   lcd.print(queryToPrint);
 
+  // Print the result to the LCD screen
   char resultToPrint[LCD_LINE_LENGTH] = "";
   if(resultObj.validResult) {
     char resultString[resultLength + 1];
