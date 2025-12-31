@@ -118,30 +118,32 @@ int calculateDfs(Token *tree) {
     return 0;
 }
 
-int computeResult(Token *tokens, int tokenCount) {
+void computeResult(Token *tokens, int tokenCount, Result *result) {
     tokenIndex = 0;
     numberOfTokens = tokenCount;
     tokenList = tokens;
 
     // Some edge cases.
     if(numberOfTokens == 0) {
-        return 0;
+        result->validResult = false;
+        result->value = 0;
+        return;
     }
     else if (numberOfTokens == 1) {
-        return tokens[0].value;
+        result->value = tokens[0].value;
+        result->validResult = true;
+        return;
     }
     else if (numberOfTokens % 2 == 0) {
-        return 0;
+        result->validResult = false;
+        result->value = 0;
+        return;
     }
 
-    Serial.println("Parsing expression...");
-
     Token *resultTree = parseExpression(-1);
-    Serial.println("Result tree: ");
-    printTree(resultTree, 0);
-    int result = calculateDfs(resultTree);
-    Serial.print("Result: ");
-    Serial.print(result);
-    Serial.println("--------------------------------");
-    return 0;
+    // Serial.println("Result tree: ");
+    // printTree(resultTree, 0);
+    result->value = calculateDfs(resultTree);
+    result->validResult = true;
+    return;
 }

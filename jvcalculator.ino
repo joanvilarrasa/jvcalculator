@@ -16,6 +16,7 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 
 char query[64] = "";
 char result[LCD_LINE_LENGTH] = "";
+Result resultObj = {0, false};
 Token tokens[MAX_TOKENS];
 int tokenCount = 0;
 
@@ -36,6 +37,13 @@ void clearQuery() {
     query[i] = ' ';
   }
   cursorIndex = 0;
+}
+
+int getResultLength() {
+  if(resultObj.validResult) {
+    return strlen(String(resultObj.value).c_str());
+  }
+  return 0;
 }
 
 void computeResult() {
@@ -60,20 +68,8 @@ void computeResult() {
   }
   Serial.print("]");
   Serial.println();
-  int resultValue = computeResult(tokens, tokenCount);
-  Serial.println();
-  Serial.print("Result value: ");
-  Serial.print(resultValue);
-  Serial.println();
-  Serial.println("--------------------------------");
-
-
-  result[0] = '1';
-  result[1] = '2';
-  result[2] = '3';
-  result[3] = '4';
-  result[4] = '5';
-  resultLength = 5;
+  computeResult(tokens, tokenCount, &resultObj);
+  resultLength = getResultLength();
 }
 
 void setup() {
@@ -185,14 +181,25 @@ void loop() {
   lcd.print(queryToPrint);
 
   char resultToPrint[LCD_LINE_LENGTH] = "";
-  for(int i = 0; i < LCD_LINE_LENGTH; i++) {
-    int resultIndex = resultLength + i - LCD_LINE_LENGTH;
-    if(resultIndex >= 0) {
-      resultToPrint[i] = result[resultIndex];
+  if(resultObj.validResult) {
+    char resultString[resultLength + 1];
+    sprintf(resultString, "%d", resultObj.value);
+    
+    const int spacesToAdd = LCD_LINE_LENGTH - 1 - resultLength;
+    for(int i = 0; i < LCD_LINE_LENGTH; i++) {
+      if(i < spacesToAdd) {
+        resultToPrint[i] = ' ';
+      }
+      else {
+        resultToPrint[i] = resultString[i - spacesToAdd];
+      }
     }
-    else {
+  }
+  else {
+    for(int i = 0; i < LCD_LINE_LENGTH; i++) {
       resultToPrint[i] = ' ';
     }
+    resultLength = 0;
   }
   lcd.setCursor(0,1);
   lcd.print(resultToPrint);

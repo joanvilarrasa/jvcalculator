@@ -5,7 +5,12 @@
 
 #include <Arduino.h>
 
-int computeResult(Token *tokens, int tokenCount);
+struct Result {
+    int value;     
+    bool validResult;
+};
+
+void computeResult(Token *tokens, int tokenCount, Result *result);
 
 #endif
 
