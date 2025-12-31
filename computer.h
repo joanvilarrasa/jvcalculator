@@ -3,6 +3,8 @@
 
 #include "tokenizer.h"
 
+#include <Arduino.h>
+
 int computeResult(Token *tokens, int tokenCount);
 
 #endif

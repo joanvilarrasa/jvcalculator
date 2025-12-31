@@ -8,6 +8,19 @@ struct TokenNode {
     TokenNode *right;
 };
 
+void printTree(TokenNode *tree, int level) {
+    if(tree == nullptr) {
+        return;
+    }
+    printTree(tree->left, level + 1);
+    for(int i = 0; i < level; i++) {
+        Serial.print("  ");
+    }
+    Serial.println(tree->token.value);
+    printTree(tree->right, level + 1);
+}
+
+
 TokenNode* parseExpression(Token *tokens, int tokenCount, int &i, int minPrecedence);
 
 TokenNode* getNextTokenNode(Token *tokens, int tokenCount, int &i) {
@@ -62,36 +75,36 @@ TokenNode* parseExpression(Token *tokens, int tokenCount, int &i, int minPrecede
     return leftNode;
 }
 
-int calculateDfs(TokenNode *tree) {
-    if(tree == nullptr) {
-        return 0;
-    }
-    if(tree->token.type == TOKEN_NUMBER) {
-        return tree->token.value;
-    }
+// int calculateDfs(TokenNode *tree) {
+//     if(tree == nullptr) {
+//         return 0;
+//     }
+//     if(tree->token.type == TOKEN_NUMBER) {
+//         return tree->token.value;
+//     }
 
-    int left = calculateDfs(tree->left);
-    int right = calculateDfs(tree->right);
-    if(tree->token.op == '+') {
-        return left + right;
-    }
-    else if(tree->token.op == '-') { 
-        return left - right;
-    }
-    else if(tree->token.op == '*') {
-        return left * right;
-    }
-    else if(tree->token.op == '/') {
-        return left / right;
-    }
-    return 0;
-}
+//     int left = calculateDfs(tree->left);
+//     int right = calculateDfs(tree->right);
+//     if(tree->token.op == '+') {
+//         return left + right;
+//     }
+//     else if(tree->token.op == '-') { 
+//         return left - right;
+//     }
+//     else if(tree->token.op == '*') {
+//         return left * right;
+//     }
+//     else if(tree->token.op == '/') {
+//         return left / right;
+//     }
+//     return 0;
+// }
 
 int computeResult(Token *tokens, int tokenCount) {
     int i = 0;
     TokenNode *resultTree = parseExpression(tokens, tokenCount, i, -1);
-    int result = calculateDfs(resultTree);
-    return result;
+    printTree(resultTree, 0);
+    // int result = calculateDfs(resultTree);
+    // return result;
+    return 0;
 }
-
-
