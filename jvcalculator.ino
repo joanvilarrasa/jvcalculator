@@ -41,10 +41,12 @@ void clearQuery() {
 void computeResult() {
   tokenCount = tokenizeQuery(query, tokens);
 
-  Serial.println("Tokens (");
+  Serial.print("Tokens (");
   Serial.print(String(tokenCount));
   Serial.print("):");
-  Serial.println("[");
+  Serial.println();
+
+  Serial.print("[");
   for(int i = 0; i < tokenCount; i++) {
     if(tokens[i].type == TOKEN_NUMBER) {
       Serial.print(tokens[i].value);
@@ -56,12 +58,13 @@ void computeResult() {
       Serial.print(", ");
     }
   }
-  Serial.println("]");
+  Serial.print("]");
   Serial.println();
   int resultValue = computeResult(tokens, tokenCount);
   Serial.println();
-  Serial.println("Result value: ");
+  Serial.print("Result value: ");
   Serial.print(resultValue);
+  Serial.println();
   Serial.println("--------------------------------");
 
 
