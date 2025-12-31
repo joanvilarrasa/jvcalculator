@@ -56,9 +56,13 @@ void computeResult() {
       Serial.print(", ");
     }
   }
+  Serial.println();
   Serial.println("Token count: " + String(tokenCount));
+  Serial.println();
   int resultValue = computeResult(tokens, tokenCount);
-  Serial.println(resultValue);
+  Serial.println();
+  Serial.println("Result value: ");
+  Serial.print(resultValue);
 
   result[0] = '1';
   result[1] = '2';

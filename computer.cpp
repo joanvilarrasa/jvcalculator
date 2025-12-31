@@ -102,6 +102,9 @@ int computeResult(Token *tokens, int tokenCount) {
     numberOfTokens = tokenCount;
     tokenList = tokens;
     Token *resultTree = parseExpression(-1);
+    Serial.println();
+    Serial.println("Result tree: ");
     printTree(resultTree, 0);
+    Serial.println();
     return 0;
 }
