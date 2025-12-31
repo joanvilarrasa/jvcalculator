@@ -93,30 +93,30 @@ Token* parseExpression(int minPrecedence) {
     return leftNode;
 }
 
-// int calculateDfs(TokenNode *tree) {
-//     if(tree == nullptr) {
-//         return 0;
-//     }
-//     if(tree->token.type == TOKEN_NUMBER) {
-//         return tree->token.value;
-//     }
+int calculateDfs(Token *tree) {
+    if(tree == nullptr) {
+        return 0;
+    }
+    if(tree->type == TOKEN_NUMBER) {
+        return tree->value;
+    }
 
-//     int left = calculateDfs(tree->left);
-//     int right = calculateDfs(tree->right);
-//     if(tree->token.op == '+') {
-//         return left + right;
-//     }
-//     else if(tree->token.op == '-') { 
-//         return left - right;
-//     }
-//     else if(tree->token.op == '*') {
-//         return left * right;
-//     }
-//     else if(tree->token.op == '/') {
-//         return left / right;
-//     }
-//     return 0;
-// }
+    int left = calculateDfs(tree->left);
+    int right = calculateDfs(tree->right);
+    if(tree->op == '+') {
+        return left + right;
+    }
+    else if(tree->op == '-') { 
+        return left - right;
+    }
+    else if(tree->op == '*') {
+        return left * right;
+    }
+    else if(tree->op == '/') {
+        return left / right;
+    }
+    return 0;
+}
 
 int computeResult(Token *tokens, int tokenCount) {
     tokenIndex = 0;
@@ -139,5 +139,9 @@ int computeResult(Token *tokens, int tokenCount) {
     Token *resultTree = parseExpression(-1);
     Serial.println("Result tree: ");
     printTree(resultTree, 0);
+    int result = calculateDfs(resultTree);
+    Serial.print("Result: ");
+    Serial.print(result);
+    Serial.println("--------------------------------");
     return 0;
 }

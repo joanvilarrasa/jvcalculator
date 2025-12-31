@@ -147,7 +147,7 @@ void loop() {
   else if(irValue == KEY_SLASH) { addCharToQuery('/'); }
 
   // Compute the result
-  computeResult();
+  //computeResult();
 
   // Handle special keys
   if(irValue == KEY_CLEAR) { 
