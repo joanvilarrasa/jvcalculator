@@ -123,6 +123,17 @@ int computeResult(Token *tokens, int tokenCount) {
     numberOfTokens = tokenCount;
     tokenList = tokens;
 
+    // Some edge cases.
+    if(numberOfTokens == 0) {
+        return 0;
+    }
+    else if (numberOfTokens == 1) {
+        return tokens[0].value;
+    }
+    else if (numberOfTokens % 2 == 0) {
+        return 0;
+    }
+
     Serial.println("Parsing expression...");
 
     Token *resultTree = parseExpression(-1);
