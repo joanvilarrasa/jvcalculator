@@ -1,10 +1,11 @@
 # jvcalculator
 
-A simple calculator experiment built for the Raspberry Pi Pico 2. This is just a simple project to explore the raspberry Pi, and the operator precedence algorithm proposed by Jonathan Blow.
+A simple calculator experiment.
 
 ## Overview
 
-This is a short experiment project that implements a basic calculator on a Raspberry Pi Pico 2. The calculator uses a 2-line LCD display (16 characters per line) where:
+A simple calculator experiment built for the Raspberry Pi Pico 2. This is just a simple project to explore the raspberry Pi, and the operator precedence algorithm proposed by Jonathan Blow.
+The calculator uses a 2-line LCD display (16 characters per line) where:
 - **Line 1**: Displays the current query/expression being entered
 - **Line 2**: Displays the computed result in real-time
 
